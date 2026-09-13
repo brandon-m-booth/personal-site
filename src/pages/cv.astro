@@ -2,17 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="CV" description="Curriculum vitae.">
+<BaseLayout title="Curriculum Vitae" description="Curriculum vitae">
   <div class="container">
     <div class="section-heading">
-      <h1>CV</h1>
+      <h1>Curriculum Vitae</h1>
       <a class="btn" href="/cv.pdf" download>Download PDF</a>
     </div>
-    <p class="muted">
-      This is a placeholder until you drop in your real CV. Export the PDF from Overleaf and
-      replace <code>public/cv.pdf</code> with it (same filename) - no code changes needed, this
-      page always shows whatever file lives at that path.
-    </p>
     <object data="/cv.pdf" type="application/pdf" class="cv-embed">
       <p>
         Your browser can't display the PDF inline. <a href="/cv.pdf">Download it here</a>{' '}
