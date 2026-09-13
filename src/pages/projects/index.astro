@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const all = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.order - a.data.order
+);
+
+const categories: { key: 'research' | 'personal' | 'work'; label: string }[] = [
+  { key: 'research', label: 'Research Projects' },
+  { key: 'personal', label: 'Personal Projects' },
+  { key: 'work', label: 'Work Projects' },
+];
+---
+
+<BaseLayout title="Projects">
+  <div class="container-wide">
+    <h1>Projects</h1>
+    <p class="muted">
+      A running portal of research, personal, and work projects. Each project has its own page
+      with pictures, updates, and links to papers or code.
+    </p>
+
+    {categories.map(({ key, label }) => {
+      const items = all.filter((p) => p.data.category === key);
+      if (items.length === 0) return null;
+      return (
+        <section style="margin-top:2.5rem;">
+          <h2>{label}</h2>
+          <div class="grid-cards">
+            {items.map((project) => (
+              <a class="card project-card" href={`/projects/${project.slug}`} style="text-decoration:none; color:inherit;">
+                {project.data.image && <img src={project.data.image} alt={project.data.imageAlt || ''} />}
+                <h3 style="margin:0 0 0.3rem;">{project.data.title}</h3>
+                {(project.data.dates || project.data.organization) && (
+                  <p class="muted" style="margin:0 0 0.4rem; font-size:0.9rem;">
+                    {[project.data.organization, project.data.dates].filter(Boolean).join(' · ')}
+                  </p>
+                )}
+                <p style="margin:0;">{project.data.summary}</p>
+                <div style="margin-top:0.5rem;">
+                  {project.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      );
+    })}
+  </div>
+</BaseLayout>

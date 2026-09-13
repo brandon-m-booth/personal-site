@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { SITE, EXTERNAL_LINKS } from '../site.config';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft && data.featured))
+  .sort((a, b) => b.data.order - a.data.order)
+  .slice(0, 3);
+---
+
+<BaseLayout>
+  <div class="container">
+    <section style="display:flex; gap:1.75rem; flex-wrap:wrap; align-items:flex-start;">
+      <img
+        src="/images/home-avatar.jpg"
+        alt="Brandon M. Booth"
+        style="width:140px; height:auto; border-radius:10px; flex-shrink:0;"
+      />
+      <div style="flex:1; min-width:260px;">
+        <h1 style="margin-bottom:0.2rem;">{SITE.name}</h1>
+        <p class="muted" style="margin-top:0;">
+          Assistant Professor, Department of Computer Science, University of Memphis
+        </p>
+
+        <p>
+          Welcome! I am an assistant professor working with the Department of Computer Science at
+          the University of Memphis. My research interests span topics in machine learning, signal
+          processing, algorithmic bias/fairness, and data collection and annotation methods,
+          especially as they pertain to human behavior and experience modeling. I have a diverse
+          background in industry, working as a video game and serious game developer and as an
+          R&amp;D engineer on problems in robotics, computer vision, human-computer interaction
+          systems, and geospatial visualization.
+        </p>
+
+        <p>
+          I'm always interested in hearing from prospective PhD students who want to take a
+          computational approach to understanding human behavior. If that's you,
+          <a href={`mailto:${SITE.email}`}>get in touch</a>.
+        </p>
+
+        <p style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-top:1.5rem;">
+          <a class="btn" href="/cv">View CV</a>
+          <a class="btn-outline" href="/publications">Publications</a>
+          <a class="btn-outline" href="/projects">Projects</a>
+          {EXTERNAL_LINKS.lab && (
+            <a class="btn-outline" href={EXTERNAL_LINKS.lab} target="_blank" rel="noopener noreferrer">
+              {EXTERNAL_LINKS.labLabel || 'Lab'} &rarr;
+            </a>
+          )}
+        </p>
+      </div>
+    </section>
+
+    {projects.length > 0 && (
+      <section style="margin-top:3rem;">
+        <div class="section-heading">
+          <h2>Featured projects</h2>
+          <a href="/projects">All projects &rarr;</a>
+        </div>
+        <div class="grid-cards">
+          {projects.map((project) => (
+            <a class="card project-card" href={`/projects/${project.slug}`} style="text-decoration:none; color:inherit;">
+              {project.data.image && <img src={project.data.image} alt={project.data.imageAlt || ''} />}
+              <h3 style="margin:0 0 0.3rem;">{project.data.title}</h3>
+              {project.data.dates && <p class="muted" style="margin:0 0 0.4rem; font-size:0.9rem;">{project.data.dates}</p>}
+              <p style="margin:0;">{project.data.summary}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {posts.length > 0 && (
+      <section style="margin-top:3rem;">
+        <div class="section-heading">
+          <h2>Latest posts</h2>
+          <a href="/blog">All posts &rarr;</a>
+        </div>
+        {posts.map((post) => (
+          <div class="card">
+            <a href={`/blog/${post.slug}`} style="text-decoration:none; color:inherit;">
+              <h3 style="margin:0 0 0.3rem;">{post.data.title}</h3>
+            </a>
+            <p class="muted" style="margin:0 0 0.4rem; font-size:0.9rem;">
+              {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </p>
+            {post.data.description && <p style="margin:0;">{post.data.description}</p>}
+          </div>
+        ))}
+      </section>
+    )}
+  </div>
+</BaseLayout>

@@ -1,0 +1,39 @@
+---
+import { SITE, EXTERNAL_LINKS } from '../site.config';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container-wide">
+    {EXTERNAL_LINKS.lab && EXTERNAL_LINKS.labLogo && (
+      <a href={EXTERNAL_LINKS.lab} target="_blank" rel="noopener noreferrer" style="display:inline-block; margin-bottom:0.9rem;">
+        <img
+          src={EXTERNAL_LINKS.labLogo}
+          alt={EXTERNAL_LINKS.labLogoAlt || EXTERNAL_LINKS.labLabel || 'Lab logo'}
+          style="height:36px; width:auto; display:block;"
+        />
+      </a>
+    )}
+    <ul class="footer-links">
+      {EXTERNAL_LINKS.lab && (
+        <li><a href={EXTERNAL_LINKS.lab} target="_blank" rel="noopener noreferrer">{EXTERNAL_LINKS.labLabel || 'Lab'}</a></li>
+      )}
+      {EXTERNAL_LINKS.googleScholar && (
+        <li><a href={EXTERNAL_LINKS.googleScholar} target="_blank" rel="noopener noreferrer">Google Scholar</a></li>
+      )}
+      {EXTERNAL_LINKS.linkedin && (
+        <li><a href={EXTERNAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+      )}
+      {EXTERNAL_LINKS.youtube && (
+        <li><a href={EXTERNAL_LINKS.youtube} target="_blank" rel="noopener noreferrer">YouTube</a></li>
+      )}
+      {EXTERNAL_LINKS.github && (
+        <li><a href={EXTERNAL_LINKS.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>
+      )}
+      <li><a href={`mailto:${SITE.email}`}>Email</a></li>
+      <li><a href="/blog/rss.xml">RSS</a></li>
+    </ul>
+    <p>&copy; {year} {SITE.name}. Built with Astro, hosted on GitHub Pages.</p>
+  </div>
+</footer>

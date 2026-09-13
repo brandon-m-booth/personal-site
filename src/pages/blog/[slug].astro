@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft || import.meta.env.DEV);
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="container">
+    <h1 style="margin-bottom:0.2rem;">{post.data.title}</h1>
+    <p class="muted" style="margin-top:0;">
+      {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+      {post.data.draft && <strong style="color:#b5442e;"> &middot; DRAFT</strong>}
+    </p>
+    <div>
+      {post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+    </div>
+    <div class="prose" style="margin-top:1.5rem;">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose :global(h2) {
+    margin-top: 2rem;
+  }
+  .prose :global(pre) {
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+  .prose :global(img) {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+</style>

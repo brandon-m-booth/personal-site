@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft || import.meta.env.DEV);
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+---
+
+<BaseLayout title={project.data.title} description={project.data.summary}>
+  <article class="container">
+    <p><a href="/projects">&larr; All projects</a></p>
+    <h1 style="margin-bottom:0.2rem;">{project.data.title}</h1>
+    <p class="muted" style="margin-top:0;">
+      {[project.data.organization, project.data.dates].filter(Boolean).join(' · ')}
+      {project.data.draft && <strong style="color:#b5442e;"> &middot; DRAFT</strong>}
+    </p>
+
+    {project.data.image && (
+      <img
+        src={project.data.image}
+        alt={project.data.imageAlt || ''}
+        style="width:100%; border-radius:10px; margin:1rem 0;"
+      />
+    )}
+
+    {project.data.links.length > 0 && (
+      <p style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+        {project.data.links.map((link: { label: string; url: string }) => (
+          <a class="btn-outline" href={link.url} target="_blank" rel="noopener noreferrer">
+            {link.label}
+          </a>
+        ))}
+      </p>
+    )}
+
+    <div>
+      {project.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+    </div>
+
+    <div class="prose" style="margin-top:1.5rem;">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose :global(h2) {
+    margin-top: 2rem;
+  }
+  .prose :global(img) {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+</style>

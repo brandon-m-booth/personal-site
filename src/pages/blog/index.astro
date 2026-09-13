@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<BaseLayout title="Blog">
+  <div class="container">
+    <div class="section-heading">
+      <h1>Blog</h1>
+      <a href="/blog/rss.xml">RSS feed</a>
+    </div>
+
+    {posts.length === 0 && <p class="muted">No posts yet.</p>}
+
+    {posts.map((post) => (
+      <div class="card">
+        <a href={`/blog/${post.slug}`} style="text-decoration:none; color:inherit;">
+          <h2 style="margin:0 0 0.3rem;">{post.data.title}</h2>
+        </a>
+        <p class="muted" style="margin:0 0 0.5rem; font-size:0.9rem;">
+          {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </p>
+        {post.data.description && <p style="margin:0 0 0.5rem;">{post.data.description}</p>}
+        <div>
+          {post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+        </div>
+      </div>
+    ))}
+  </div>
+</BaseLayout>
