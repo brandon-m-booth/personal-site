@@ -1,10 +1,9 @@
 ---
 title: "Rubber Bandito"
 category: work
-summary: "Contributed to Rubber Bandito, a Kickstarter-funded product."
-dates: ""
-organization: ""
-order: 6
+summary: "A Kickstarter-funded product."
+organization: "Cold Dish"
+order: 8
 image: "/images/projects/rubber-bandito-cover.jpeg"
 imageAlt: "Rubber Bandito"
 links:
@@ -13,6 +12,7 @@ links:
 tags: []
 draft: false
 featured: false
+external: true
 ---
 
-Contributed to Rubber Bandito. See the Kickstarter page for details on the product.
+See the Kickstarter page for details on the product.

@@ -249,6 +249,85 @@ main {
   background: var(--color-bg-subtle);
 }
 
+/* A denser image-grid layout for "Work Projects" style sections where every item is an
+   `external: true` project (see src/content/config.ts) - each tile links straight out to the
+   game/product's own page rather than to a page on this site, so it's just a picture, a title,
+   and a small icon signaling it leaves the site (matches how the old site listed shipped
+   titles as a plain image grid). Fixed at 4 columns to reproduce the exact 2-row-by-4-column
+   arrangement the old brandonmbooth.net site used for this same set of 8 titles; collapses to
+   2 columns on narrow/mobile screens (same 640px breakpoint used elsewhere on the site). */
+.grid-work-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .grid-work-tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.work-tile {
+  display: block;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.6rem;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.work-tile:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 2px 6px rgba(31, 61, 99, 0.15);
+}
+
+.work-tile img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  background: var(--color-bg-subtle);
+  border-radius: calc(var(--radius) - 3px);
+  display: block;
+}
+
+.work-tile-caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  text-align: center;
+  line-height: 1.3;
+  margin-top: 0.55rem;
+}
+
+.work-tile-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.work-tile-org {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-top: 0.15rem;
+}
+
+.work-tile .external-icon {
+  font-size: 0.85em;
+  color: var(--color-text-muted);
+}
+
+.work-tile:hover .external-icon {
+  color: var(--color-accent);
+}
+
 form.pub-controls {
   display: flex;
   flex-wrap: wrap;
@@ -271,6 +350,18 @@ form.pub-controls input[type='search'] {
   flex: 1 1 240px;
 }
 
+.pub-section-heading {
+  margin: 2.25rem 0 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.pub-section-heading:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
 .pub-entry {
   border-bottom: 1px solid var(--color-border);
   padding: 1rem 0;
@@ -278,6 +369,14 @@ form.pub-controls input[type='search'] {
 
 .pub-entry:first-child {
   padding-top: 0;
+}
+
+.pub-unpublished {
+  margin-top: 1rem;
+}
+
+.pub-unpub-title {
+  font-weight: 600;
 }
 
 .pub-meta {

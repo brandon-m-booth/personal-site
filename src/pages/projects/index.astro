@@ -24,26 +24,67 @@ const categories: { key: 'research' | 'personal' | 'work'; label: string }[] = [
     {categories.map(({ key, label }) => {
       const items = all.filter((p) => p.data.category === key);
       if (items.length === 0) return null;
+      // "work" is always presented as a dense grid of direct-linking image tiles (matching the
+      // old brandonmbooth.net site's layout for these titles), regardless of whether every single
+      // item happens to be external: true - deciding this per-category rather than via
+      // `items.every(p => p.data.external)` means one stray non-external/leftover entry can't
+      // silently break every other tile's link (this happened once: a leftover, superseded
+      // heavy-iron-studios.md without `external: true` flipped the whole section back to
+      // linking at nonexistent local `/projects/<slug>` pages for every tile). Each tile's own
+      // href still falls back sensibly per-item below.
+      const useTileGrid = key === 'work';
       return (
         <section style="margin-top:2.5rem;">
           <h2>{label}</h2>
-          <div class="grid-cards">
-            {items.map((project) => (
-              <a class="card project-card" href={`/projects/${project.slug}`} style="text-decoration:none; color:inherit;">
-                {project.data.image && <img src={project.data.image} alt={project.data.imageAlt || ''} />}
-                <h3 style="margin:0 0 0.3rem;">{project.data.title}</h3>
-                {(project.data.dates || project.data.organization) && (
-                  <p class="muted" style="margin:0 0 0.4rem; font-size:0.9rem;">
-                    {[project.data.organization, project.data.dates].filter(Boolean).join(' · ')}
-                  </p>
-                )}
-                <p style="margin:0;">{project.data.summary}</p>
-                <div style="margin-top:0.5rem;">
-                  {project.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
-                </div>
-              </a>
-            ))}
-          </div>
+          {useTileGrid ? (
+            <div class="grid-work-tiles">
+              {items.map((project) => {
+                const href = project.data.external
+                  ? project.data.links[0]?.url
+                  : `/projects/${project.slug}`;
+                return (
+                  <a
+                    class="work-tile"
+                    href={href}
+                    target={project.data.external ? '_blank' : undefined}
+                    rel={project.data.external ? 'noopener noreferrer' : undefined}
+                    title={[project.data.title, project.data.organization].filter(Boolean).join(' - ')}
+                  >
+                    {project.data.image && <img src={project.data.image} alt={project.data.imageAlt || project.data.title} />}
+                    <span class="work-tile-caption">
+                      <span class="work-tile-title">
+                        {project.data.title}
+                        {project.data.external && (
+                          <span class="external-icon" aria-hidden="true">&#8599;</span>
+                        )}
+                      </span>
+                      {project.data.organization && (
+                        <span class="work-tile-org">{project.data.organization}</span>
+                      )}
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+          ) : (
+            <div class="grid-cards">
+              {items.map((project) => (
+                <a class="card project-card" href={`/projects/${project.slug}`} style="text-decoration:none; color:inherit;">
+                  {project.data.image && <img src={project.data.image} alt={project.data.imageAlt || ''} />}
+                  <h3 style="margin:0 0 0.3rem;">{project.data.title}</h3>
+                  {(project.data.dates || project.data.organization) && (
+                    <p class="muted" style="margin:0 0 0.4rem; font-size:0.9rem;">
+                      {[project.data.organization, project.data.dates].filter(Boolean).join(' · ')}
+                    </p>
+                  )}
+                  <p style="margin:0;">{project.data.summary}</p>
+                  <div style="margin-top:0.5rem;">
+                    {project.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
         </section>
       );
     })}

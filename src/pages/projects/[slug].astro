@@ -3,7 +3,12 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects', ({ data }) => !data.draft || import.meta.env.DEV);
+  // `external: true` projects have no page of their own - they're a tile on /projects that
+  // links straight out to their first `links` entry (see src/content/config.ts).
+  const projects = await getCollection(
+    'projects',
+    ({ data }) => (!data.draft || import.meta.env.DEV) && !data.external
+  );
   return projects.map((project) => ({
     params: { slug: project.slug },
     props: { project },

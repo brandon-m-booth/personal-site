@@ -1,4 +1,10 @@
 ---
+# SUPERSEDED: this grouped page was replaced by six individual project files
+# (family-guy-video-game.md, ufc-personal-trainer.md, spongebob-truth-or-square.md,
+# up-heavy-iron.md, walle-heavy-iron.md, hail-to-the-chimp.md), each with external: true,
+# so they render as direct-linking tiles on /projects instead of a shared local page.
+# draft: true keeps this file harmless (excluded from the projects index and, in production
+# builds, from getStaticPaths) until it can be deleted outright - safe to delete this file.
 title: "Heavy Iron Studios Projects"
 category: work
 summary: "Game development work at Heavy Iron Studios, including licensed titles for THQ."
@@ -21,7 +27,7 @@ links:
   - label: "WALL-E"
     url: "http://www.heavy-iron.com/walle.php"
 tags: ["game dev"]
-draft: false
+draft: true
 featured: false
 ---
 

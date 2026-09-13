@@ -7,10 +7,11 @@ draft: false
 coverImage: "/images/blog/ground-truth-human-behavior/goofy-faces.png"
 ---
 
-*Welcome to the very first SAIL lab blog post!*
+This post originally appeared on the [SAIL BEAM blog](https://sail.usc.edu/blog/2017/ground-truth-human-behavior.html) and is republished here.
 
-> This post originally appeared on the [SAIL BEAM blog](https://sail.usc.edu/blog/2017/ground-truth-human-behavior.html)
-> on June 19, 2017, and is republished here.
+---
+
+*Welcome to the very first SAIL lab blog post!*
 
 Research in human behavior is often confounded by "human factors," meaning gathering quality information from people is hard ([NP hard?!](http://smbc-comics.com/index.php?id=3954)).
 

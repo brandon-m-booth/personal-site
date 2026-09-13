@@ -53,6 +53,13 @@ const projects = defineCollection({
     // Set true to hide from the index while still keeping the page around as a draft
     draft: z.boolean().default(false),
     featured: z.boolean().default(false),
+    // Set true for a project with no dedicated /projects/<slug> page of its own - just an
+    // image + title tile on the /projects index that links straight out to its first `links`
+    // entry (e.g. a shipped game's own product page, a Kickstarter). Used for the "Work
+    // Projects" grid, matching how the old brandonmbooth.net site listed shipped titles as a
+    // simple image grid rather than giving each one its own subpage. Requires at least one
+    // entry in `links` - its url is what the tile links to.
+    external: z.boolean().default(false),
   }),
 });
 

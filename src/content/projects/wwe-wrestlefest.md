@@ -1,8 +1,7 @@
 ---
 title: "WWE WrestleFest (iPhone/iPad)"
 category: work
-summary: "Worked on WWE WrestleFest, a mobile game published by THQ."
-dates: ""
+summary: "A mobile game published by THQ."
 organization: "THQ"
 order: 7
 image: "/images/projects/wwe-wrestlefest-cover.jpg"
@@ -13,7 +12,7 @@ links:
 tags: ["game dev", "mobile"]
 draft: false
 featured: false
+external: true
 ---
 
-Worked on WWE WrestleFest, a mobile game for iPhone/iPad published by THQ, during a game
-development role in industry.
+See the game's own page for details.
