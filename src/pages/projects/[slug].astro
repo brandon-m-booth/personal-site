@@ -27,7 +27,7 @@ const { Content } = await project.render();
       <img
         src={project.data.image}
         alt={project.data.imageAlt || ''}
-        style="width:100%; border-radius:10px; margin:1rem 0;"
+        style={`width:${project.data.imageWidth}%; border-radius:10px; margin:1rem 0;`}
       />
     )}
 
@@ -59,4 +59,203 @@ const { Content } = await project.render();
     max-width: 100%;
     border-radius: 8px;
   }
+  /* A responsive grid of captioned photos - used for old-site project galleries
+     migrated as <div class="project-gallery"><figure>...</figure>...</div>. */
+  .prose :global(.project-gallery) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin: 1.25rem 0;
+  }
+  .prose :global(.project-gallery figure) {
+    margin: 0;
+  }
+  .prose :global(.project-gallery img) {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    display: block;
+  }
+  .prose :global(.project-gallery figcaption) {
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    margin-top: 0.4rem;
+    line-height: 1.4;
+  }
+  /* A responsive 16:9 embedded video (e.g. a YouTube iframe). */
+  .prose :global(.video-embed) {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    margin: 1.25rem 0;
+  }
+  .prose :global(.video-embed iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    border: none;
+  }
+
+  /* A one-at-a-time photo carousel - used for old-site project galleries
+     migrated as <div class="project-carousel"><div class="project-carousel-viewport">
+     <div class="project-carousel-slide"><img/></div>...</div>
+     <button class="project-carousel-arrow project-carousel-prev">...</button>
+     <button class="project-carousel-arrow project-carousel-next">...</button>
+     <div class="project-carousel-dots"></div></div>. Dots and slide-switching are
+     wired up by the <script> below; the markup works (first slide visible, no
+     dots) even if JavaScript never runs. */
+  .prose :global(.project-carousel) {
+    margin: 1.25rem 0;
+    outline: none;
+  }
+  .prose :global(.project-carousel-viewport) {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .prose :global(.project-carousel-slide) {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .prose :global(.project-carousel-slide.is-active) {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+  }
+  .prose :global(.project-carousel-slide img) {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+    border-radius: 0;
+    display: block;
+  }
+  .prose :global(.project-carousel-arrow) {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: rgba(253, 251, 246, 0.9);
+    color: var(--color-secondary);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .prose :global(.project-carousel-arrow:hover) {
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+    border-color: var(--color-accent);
+  }
+  .prose :global(.project-carousel-prev) {
+    left: 0.6rem;
+  }
+  .prose :global(.project-carousel-next) {
+    right: 0.6rem;
+  }
+  .prose :global(.project-carousel-dots) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+  .prose :global(.project-carousel-dot) {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: var(--color-card-bg);
+    padding: 0;
+    cursor: pointer;
+  }
+  .prose :global(.project-carousel-dot.is-active) {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+  .prose :global(.project-carousel-counter) {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-top: 0.35rem;
+  }
 </style>
+
+<script>
+  function initProjectCarousels() {
+    document.querySelectorAll<HTMLElement>('.project-carousel').forEach((carousel) => {
+      if (carousel.dataset.carouselInit === 'true') return;
+
+      const slides = Array.from(carousel.querySelectorAll<HTMLElement>('.project-carousel-slide'));
+      if (slides.length === 0) return;
+      carousel.dataset.carouselInit = 'true';
+
+      // Single-image "carousels" don't need arrows/dots/keyboard handling.
+      if (slides.length === 1) {
+        slides[0].classList.add('is-active');
+        return;
+      }
+
+      let current = Math.max(0, slides.findIndex((s) => s.classList.contains('is-active')));
+
+      const dotsContainer = carousel.querySelector('.project-carousel-dots');
+      const dots = slides.map((_, i) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'project-carousel-dot';
+        dot.setAttribute('aria-label', `Go to image ${i + 1} of ${slides.length}`);
+        dot.addEventListener('click', () => goTo(i));
+        dotsContainer?.appendChild(dot);
+        return dot;
+      });
+
+      const counter = carousel.querySelector('.project-carousel-counter');
+
+      function render() {
+        slides.forEach((s, i) => s.classList.toggle('is-active', i === current));
+        dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
+        if (counter) counter.textContent = `${current + 1} / ${slides.length}`;
+      }
+
+      function goTo(i: number) {
+        current = (i + slides.length) % slides.length;
+        render();
+      }
+
+      carousel.querySelector('.project-carousel-prev')?.addEventListener('click', () => goTo(current - 1));
+      carousel.querySelector('.project-carousel-next')?.addEventListener('click', () => goTo(current + 1));
+
+      carousel.setAttribute('tabindex', '0');
+      carousel.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'ArrowLeft') goTo(current - 1);
+        if (e.key === 'ArrowRight') goTo(current + 1);
+      });
+
+      render();
+    });
+  }
+
+  initProjectCarousels();
+  document.addEventListener('astro:page-load', initProjectCarousels);
+</script>

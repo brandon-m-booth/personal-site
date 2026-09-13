@@ -68,11 +68,13 @@ function extractRawFieldsByKey(rawBib) {
     // URLs (e.g. "%2B" becomes "%252B"), so we take the url field straight from
     // the source text ourselves rather than trusting entry.URL.
     const urlMatch = block.match(/\burl\s*=\s*\{([^}]*)\}/i);
+    const doiMatch = block.match(/\bdoi\s*=\s*\{([^}]*)\}/i);
 
     byKey[key] = {
       category: categoryMatch ? categoryMatch[1].trim().toLowerCase() : null,
       pdf: pdfMatch ? pdfMatch[1].trim() : null,
       url: urlMatch ? urlMatch[1].trim() : null,
+      doi: doiMatch ? doiMatch[1].trim() : null,
       rawBibtex: block.trim(),
     };
   }
@@ -87,9 +89,6 @@ function fallbackCategory(cslType) {
       return 'conference';
     case 'book':
       return 'book';
-    case 'patent':
-    case 'document':
-      return 'patent';
     case 'manuscript':
     case 'speech':
       return 'unpublished';
@@ -105,11 +104,61 @@ const CATEGORY_LABELS = {
   journal: 'Journal Articles',
   conference: 'Conference Papers',
   book: 'Books',
-  patent: 'Patents',
   preprint: 'Preprints',
   unpublished: 'Unpublished',
   other: 'Other',
 };
+
+// Maps a DOI registrant prefix (the part before the first "/") to the
+// friendly repository/publisher name shown as the link text for an entry's
+// official version, e.g. a "10.1109/..." DOI shows as "IEEE Xplore". This is
+// keyed off the DOI itself (not the URL's hostname) because every official
+// link is now a canonical https://doi.org/<doi> link - see getOfficialLink().
+const DOI_PREFIX_LABELS = {
+  '10.1109': 'IEEE Xplore',
+  '10.1145': 'ACM Digital Library',
+  '10.5555': 'ACM Digital Library',
+  '10.1038': 'Nature',
+  '10.1016': 'ScienceDirect',
+  '10.1002': 'Wiley Online Library',
+  '10.1111': 'Wiley Online Library',
+  '10.1177': 'SAGE Journals',
+  '10.1142': 'World Scientific',
+  '10.2196': 'JMIR',
+  '10.3758': 'Springer',
+  '10.21437': 'ISCA Archive',
+};
+
+// Given a raw DOI string (no URL wrapper), returns { officialUrl, officialLabel }
+// pointing at the canonical DOI link, labeled with the publisher/repository it
+// resolves to. Entries with no DOI (an abstract or workshop paper that was
+// never assigned one) get neither - only their draft/self-hosted copy shows.
+function getOfficialLink(doi) {
+  if (!doi) return { officialUrl: '', officialLabel: '' };
+  const prefix = doi.split('/')[0];
+  return {
+    officialUrl: `https://doi.org/${doi}`,
+    officialLabel: DOI_PREFIX_LABELS[prefix] || 'DOI',
+  };
+}
+
+// Bolds every rendered form of the author's own name ("Booth, Brandon M.",
+// "Booth, B. M.", "Brandon M. Booth", etc.) inside a formatted citation's
+// HTML, so pasting a fresh BibTeX export never requires manually marking up
+// the author list. Intentionally not applied to the raw BibTeX passthrough
+// format, which should stay byte-for-byte what was pasted in.
+function boldenAuthorName(html) {
+  if (!html) return html;
+  let result = html.replace(
+    /Booth,\s*(?:Brandon\s+M\.?|Brandon|B\.\s*M\.|B\.)/g,
+    (match) => `<strong>${match}</strong>`
+  );
+  result = result.replace(
+    /(?:Brandon\s+M\.?|B\.\s*M\.)\s+Booth/g,
+    (match) => `<strong>${match}</strong>`
+  );
+  return result;
+}
 
 function formatAuthors(authorList) {
   if (!authorList || authorList.length === 0) return '';
@@ -150,6 +199,15 @@ function main() {
         : null;
     const venue = entry['container-title'] || entry.publisher || '';
     const single = new Cite([entry]);
+    const url = extra.url || entry.URL || extra.pdf || '';
+    const doi = extra.doi || entry.DOI || '';
+    const { officialUrl, officialLabel } = getOfficialLink(doi);
+    // A personal/self-hosted draft copy (Google Drive share, lab mirror, etc.)
+    // lives in the `pdf` field and is always shown separately from the
+    // official DOI link, labeled "Draft paper" - see publications/index.astro.
+    // If an entry has no DOI at all, its only link (if any) is treated as the
+    // draft copy rather than disappearing.
+    const draftUrl = extra.pdf || (!doi ? extra.url || entry.URL || '' : '');
 
     return {
       id: entry.id,
@@ -161,12 +219,16 @@ function main() {
       category,
       categoryLabel: CATEGORY_LABELS[category] || 'Other',
       note: entry.note || '',
-      url: extra.url || entry.URL || extra.pdf || '',
+      url,
       pdf: extra.pdf || '',
+      doi,
+      officialUrl,
+      officialLabel,
+      draftUrl,
       formats: {
-        apa: safeFormat(single, 'apa'),
-        mla: safeFormat(single, 'mla'),
-        chicago: safeFormat(single, 'chicago'),
+        apa: boldenAuthorName(safeFormat(single, 'apa')),
+        mla: boldenAuthorName(safeFormat(single, 'mla')),
+        chicago: boldenAuthorName(safeFormat(single, 'chicago')),
         bibtex: extra.rawBibtex || '',
       },
     };

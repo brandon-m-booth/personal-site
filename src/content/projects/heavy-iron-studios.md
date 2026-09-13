@@ -50,3 +50,7 @@ The old site also linked a game not listed under the main Heavy Iron catalog pag
 Chimp: The Presidential Party Game* (THQ / Wideload Games).
 
 ![Hail to the Chimp: The Presidential Party Game box art](/images/projects/misc-video-project.png)
+
+<div class="video-embed">
+  <iframe src="https://www.youtube.com/embed/4Ip_8HYdUgU" title="Hail to the Chimp: The Presidential Party Game gameplay" frameborder="0" allowfullscreen loading="lazy"></iframe>
+</div>

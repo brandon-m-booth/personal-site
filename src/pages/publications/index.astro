@@ -3,9 +3,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import publications from '../../data/publications.generated.json';
 import { EXTERNAL_LINKS } from '../../site.config';
 
-const categories = [...new Set(publications.map((p) => p.category))];
-const categoryOrder = ['journal', 'conference', 'book', 'preprint', 'patent', 'unpublished', 'other'];
-categories.sort((a, b) => categoryOrder.indexOf(a) - categoryOrder.indexOf(b));
+// The "Unpublished" section at the bottom is rendered statically (title,
+// year, and a direct download link only) rather than through the
+// search/format-toggle UI below - these aren't formal citations, so they're
+// kept simple, matching how the original site presented them.
+const unpublished = publications
+  .filter((p) => p.category === 'unpublished')
+  .sort((a, b) => (b.year || 0) - (a.year || 0));
+
+const listedPubs = publications.filter((p) => p.category !== 'unpublished');
+
+const CATEGORY_ORDER = ['journal', 'conference', 'book', 'preprint', 'other'];
+const categories = [...new Set(listedPubs.map((p) => p.category))].sort(
+  (a, b) => CATEGORY_ORDER.indexOf(a) - CATEGORY_ORDER.indexOf(b)
+);
 ---
 
 <BaseLayout title="Publications" description="Publications by Brandon M. Booth.">
@@ -15,25 +26,8 @@ categories.sort((a, b) => categoryOrder.indexOf(a) - categoryOrder.indexOf(b));
       <span class="muted">{publications.length} entries</span>
     </div>
 
-    <p class="muted">
-      Search, filter, and sort below. Click a citation format button to switch how each entry
-      is rendered, and "Copy" to copy that citation to your clipboard.
-      {EXTERNAL_LINKS.googleScholar && (
-        <>
-          You can cross-check this list against my
-          <a href={EXTERNAL_LINKS.googleScholar} target="_blank" rel="noopener noreferrer">Google Scholar profile</a>.
-        </>
-      )}
-    </p>
-
     <form class="pub-controls" id="pub-controls">
       <input type="search" id="pub-search" placeholder="Search title, venue, author..." aria-label="Search publications" />
-      <select id="pub-category" aria-label="Filter by category">
-        <option value="">All categories</option>
-        {categories.map((cat) => (
-          <option value={cat}>{publications.find((p) => p.category === cat)?.categoryLabel}</option>
-        ))}
-      </select>
       <select id="pub-sort" aria-label="Sort publications">
         <option value="year-desc">Newest first</option>
         <option value="year-asc">Oldest first</option>
@@ -47,21 +41,50 @@ categories.sort((a, b) => categoryOrder.indexOf(a) - categoryOrder.indexOf(b));
 
     <noscript>
       <div>
-        {publications.map((pub) => (
-          <div class="pub-entry">
-            <div set:html={pub.formats.apa} />
-            <div class="pub-meta">
-              {pub.categoryLabel}
-              {pub.note && <> &middot; {pub.note}</>}
-              {pub.url && <> &middot; <a href={pub.url} target="_blank" rel="noopener noreferrer">Link</a></>}
-            </div>
-          </div>
+        {categories.map((cat) => (
+          <>
+            <h2 class="pub-section-heading">{listedPubs.find((p) => p.category === cat)?.categoryLabel}</h2>
+            {listedPubs
+              .filter((p) => p.category === cat)
+              .map((pub) => (
+                <div class="pub-entry">
+                  <div class="pub-citation" set:html={pub.formats.apa} />
+                  <div class="pub-meta">
+                    {pub.note && <>{pub.note} &middot; </>}
+                    {pub.officialUrl && <a href={pub.officialUrl} target="_blank" rel="noopener noreferrer">{pub.officialLabel}</a>}
+                    {pub.officialUrl && pub.draftUrl && <> &middot; </>}
+                    {pub.draftUrl && <a href={pub.draftUrl} target="_blank" rel="noopener noreferrer">Draft paper</a>}
+                  </div>
+                </div>
+              ))}
+          </>
         ))}
       </div>
     </noscript>
+
+    {unpublished.length > 0 && (
+      <section class="pub-unpublished">
+        <h2 class="pub-section-heading">Unpublished</h2>
+        <p class="muted" style="font-size:0.9rem; margin-top:-0.5rem;">
+          Papers that were never formally published.
+        </p>
+        {unpublished.map((pub) => (
+          <div class="pub-entry pub-entry-unpublished">
+            <div class="pub-unpub-title">
+              {pub.title}
+              {pub.year && <span class="muted"> ({pub.year})</span>}
+            </div>
+            <div class="pub-meta">
+              {pub.note && <>{pub.note} &middot; </>}
+              {pub.url && <a href={pub.url} target="_blank" rel="noopener noreferrer">Download File</a>}
+            </div>
+          </div>
+        ))}
+      </section>
+    )}
   </div>
 
-  <script type="application/json" id="pub-data" set:html={JSON.stringify(publications)} />
+  <script type="application/json" id="pub-data" set:html={JSON.stringify(listedPubs)} />
 
   <script>
     type Format = 'apa' | 'mla' | 'chicago' | 'bibtex';
@@ -75,9 +98,13 @@ categories.sort((a, b) => categoryOrder.indexOf(a) - categoryOrder.indexOf(b));
       category: string;
       categoryLabel: string;
       note: string;
-      url: string;
+      officialUrl: string;
+      officialLabel: string;
+      draftUrl: string;
       formats: Record<Format, string>;
     }
+
+    const CATEGORY_ORDER = ['journal', 'conference', 'book', 'preprint', 'other'];
 
     const dataEl = document.getElementById('pub-data');
     const pubs: Pub[] = JSON.parse(dataEl?.textContent || '[]');
@@ -85,7 +112,6 @@ categories.sort((a, b) => categoryOrder.indexOf(a) - categoryOrder.indexOf(b));
     const listEl = document.getElementById('pub-list')!;
     const countEl = document.getElementById('pub-count')!;
     const searchEl = document.getElementById('pub-search') as HTMLInputElement;
-    const categoryEl = document.getElementById('pub-category') as HTMLSelectElement;
     const sortEl = document.getElementById('pub-sort') as HTMLSelectElement;
 
     // Remember each entry's currently-selected citation format across re-renders.
@@ -109,50 +135,6 @@ categories.sort((a, b) => categoryOrder.indexOf(a) - categoryOrder.indexOf(b));
       return sorted;
     }
 
-    function render() {
-      const query = searchEl.value.trim();
-      const category = categoryEl.value;
-      const sortMode = sortEl.value;
-
-      let filtered = pubs.filter((p) => matchesSearch(p, query) && (!category || p.category === category));
-      filtered = sortPubs(filtered, sortMode);
-
-      countEl.textContent = `Showing ${filtered.length} of ${pubs.length}`;
-
-      listEl.innerHTML = filtered
-        .map((pub) => {
-          const fmt = activeFormat.get(pub.id) || 'apa';
-          const citationHtml =
-            fmt === 'bibtex'
-              ? `<pre class="pub-citation bibtex">${escapeHtml(pub.formats.bibtex)}</pre>`
-              : `<div class="pub-citation">${pub.formats[fmt]}</div>`;
-
-          const buttons: Format[] = ['apa', 'mla', 'chicago', 'bibtex'];
-          const toggle = buttons
-            .map(
-              (f) =>
-                `<button type="button" class="fmt-btn${f === fmt ? ' active' : ''}" data-id="${pub.id}" data-fmt="${f}">${f.toUpperCase()}</button>`
-            )
-            .join('');
-
-          return `
-            <div class="pub-entry" data-id="${pub.id}">
-              ${citationHtml}
-              <div class="pub-meta">
-                ${pub.categoryLabel}${pub.note ? ' &middot; ' + escapeHtml(pub.note) : ''}${
-                  pub.url ? ` &middot; <a href="${escapeAttr(pub.url)}" target="_blank" rel="noopener noreferrer">Link</a>` : ''
-                }
-              </div>
-              <div class="pub-format-toggle">
-                ${toggle}
-                <button type="button" class="copy-btn" data-copy-id="${pub.id}">Copy citation</button>
-              </div>
-            </div>
-          `;
-        })
-        .join('');
-    }
-
     function escapeHtml(str: string) {
       const div = document.createElement('div');
       div.textContent = str;
@@ -161,6 +143,67 @@ categories.sort((a, b) => categoryOrder.indexOf(a) - categoryOrder.indexOf(b));
 
     function escapeAttr(str: string) {
       return str.replace(/"/g, '&quot;');
+    }
+
+    function renderEntry(pub: Pub) {
+      const fmt = activeFormat.get(pub.id) || 'apa';
+      const citationHtml =
+        fmt === 'bibtex'
+          ? `<pre class="pub-citation bibtex">${escapeHtml(pub.formats.bibtex)}</pre>`
+          : `<div class="pub-citation">${pub.formats[fmt]}</div>`;
+
+      const buttons: Format[] = ['apa', 'mla', 'chicago', 'bibtex'];
+      const toggle = buttons
+        .map(
+          (f) =>
+            `<button type="button" class="fmt-btn${f === fmt ? ' active' : ''}" data-id="${pub.id}" data-fmt="${f}">${f.toUpperCase()}</button>`
+        )
+        .join('');
+
+      const metaParts: string[] = [];
+      if (pub.note) metaParts.push(escapeHtml(pub.note));
+      if (pub.officialUrl) {
+        metaParts.push(
+          `<a href="${escapeAttr(pub.officialUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(pub.officialLabel)}</a>`
+        );
+      }
+      if (pub.draftUrl) {
+        metaParts.push(
+          `<a href="${escapeAttr(pub.draftUrl)}" target="_blank" rel="noopener noreferrer">Draft paper</a>`
+        );
+      }
+
+      return `
+        <div class="pub-entry" data-id="${pub.id}">
+          ${citationHtml}
+          <div class="pub-meta">${metaParts.join(' &middot; ')}</div>
+          <div class="pub-format-toggle">
+            ${toggle}
+            <button type="button" class="copy-btn" data-copy-id="${pub.id}">Copy citation</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function render() {
+      const query = searchEl.value.trim();
+      const sortMode = sortEl.value;
+
+      let filtered = pubs.filter((p) => matchesSearch(p, query));
+      filtered = sortPubs(filtered, sortMode);
+
+      countEl.textContent = `Showing ${filtered.length} of ${pubs.length}`;
+
+      const sections = CATEGORY_ORDER.map((cat) => ({
+        cat,
+        label: pubs.find((p) => p.category === cat)?.categoryLabel || cat,
+        items: filtered.filter((p) => p.category === cat),
+      })).filter((s) => s.items.length > 0);
+
+      listEl.innerHTML =
+        sections
+          .map((section) => `<h2 class="pub-section-heading">${escapeHtml(section.label)}</h2>${section.items.map(renderEntry).join('')}`)
+          .join('') || '<p class="muted">No publications match your search.</p>';
     }
 
     listEl.addEventListener('click', async (e) => {
@@ -189,7 +232,6 @@ categories.sort((a, b) => categoryOrder.indexOf(a) - categoryOrder.indexOf(b));
     });
 
     searchEl.addEventListener('input', render);
-    categoryEl.addEventListener('change', render);
     sortEl.addEventListener('change', render);
 
     render();

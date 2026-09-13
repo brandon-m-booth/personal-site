@@ -35,6 +35,11 @@ const projects = defineCollection({
     // Optional cover image, path relative to /public, e.g. "/images/projects/tiles.jpg"
     image: z.string().optional(),
     imageAlt: z.string().optional(),
+    // Display width of the cover image on the project's own page, as a percentage of the
+    // article's max-width (860px). Defaults to 100 (full width). Lower this for an image
+    // that looks too large at full width (e.g. a tall/narrow diagram) - it doesn't affect
+    // the project's listing-page thumbnail, only its own page.
+    imageWidth: z.number().default(100),
     // Arbitrary related links shown as buttons on the project page
     links: z
       .array(
