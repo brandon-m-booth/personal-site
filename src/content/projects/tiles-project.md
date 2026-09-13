@@ -33,9 +33,3 @@ healthcare professionals over the course of 10 weeks at a time, day and night sh
 
 The project produced two publicly released datasets, TILES-2018 and TILES-2019 (see
 [Publications](/publications)).
-
-## Updates
-
-- **2026-09-13**: Pulled in additional background and the study banner image from the BEAM lab's
-  project page.
-- **2026-09-12**: Migrated from the old site.

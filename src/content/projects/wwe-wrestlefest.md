@@ -17,7 +17,3 @@ featured: false
 
 Worked on WWE WrestleFest, a mobile game for iPhone/iPad published by THQ, during a game
 development role in industry.
-
-## Updates
-
-- **2026-09-12**: Migrated from the old site as a placeholder - please expand with your role and details.

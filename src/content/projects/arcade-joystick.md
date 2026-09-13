@@ -8,8 +8,6 @@ order: 10
 image: "/images/projects/arcade-joystick-cover.jpg"
 imageAlt: "The finished arcade joystick controller"
 links:
-  - label: "Video"
-    url: "https://www.youtube.com/watch?v=6YYsnefwc9g"
   - label: "Slagcoin joystick layout guide"
     url: "http://www.slagcoin.com/joystick/layout.html"
   - label: "Autodesk Inventor"
@@ -74,8 +72,3 @@ finished controller working with MAME:
 This project was a fun excuse to get hands-on practice with PCB design, CAD modeling, and
 microcontroller firmware all in one build - skills I first started picking up in an EE course I
 took through [MITx](https://6002x.mitx.mit.edu/courseware/).
-
-## Updates
-
-- **2026-09-13**: Pulled in the full write-up, PCB photos, and video demos from the original site.
-- **2026-09-12**: Migrated from the old site.

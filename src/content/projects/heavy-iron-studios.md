@@ -38,12 +38,6 @@ additional details per title here.
 ![Up box art](/images/projects/heavy-iron-up.jpg)
 ![WALL-E box art](/images/projects/heavy-iron-walle.jpg)
 
-## Updates
-
-- **2026-09-12**: Migrated from the old site; identified all five title box arts and replaced
-  the generic URL-slug labels with real game titles. Add your specific role/contributions per
-  title when you get a chance.
-
 ## Other video game work
 
 The old site also linked a game not listed under the main Heavy Iron catalog page: *Hail to the

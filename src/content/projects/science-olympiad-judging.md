@@ -1,8 +1,8 @@
 ---
 title: "Science Olympiad Judging"
 category: personal
-summary: "Volunteer event judge for regional Science Olympiad competitions."
-dates: "2006-2007"
+summary: "Volunteer event judge for Colorado state-wide Science Olympiad competitions."
+dates: "2005-2007"
 organization: "Science Olympiad"
 order: 5
 image: "/images/projects/science-olympiad-cover.jpg"
@@ -15,8 +15,5 @@ draft: false
 featured: false
 ---
 
-Volunteered as an event judge for regional Science Olympiad competitions.
-
-## Updates
-
-- **2026-09-12**: Migrated from the old site.
+Volunteered as an event judge for Colorado state-wide Science Olympiad competitions, evaluating
+middle and high school students' projects and performance in one of the event categories.

@@ -27,15 +27,17 @@ const { Content } = await project.render();
       <img
         src={project.data.image}
         alt={project.data.imageAlt || ''}
-        style={`width:${project.data.imageWidth}%; border-radius:10px; margin:1rem 0;`}
+        style={`display:block; width:${project.data.imageWidth}%; border-radius:10px; margin:1rem auto;`}
       />
     )}
 
     {project.data.links.length > 0 && (
       <p style="display:flex; gap:0.6rem; flex-wrap:wrap;">
         {project.data.links.map((link: { label: string; url: string }) => (
-          <a class="btn-outline" href={link.url} target="_blank" rel="noopener noreferrer">
+          <a class="btn-outline btn-external" href={link.url} target="_blank" rel="noopener noreferrer">
             {link.label}
+            <span class="external-icon" aria-hidden="true">&#8599;</span>
+            <span class="sr-only"> (external link, opens in a new tab)</span>
           </a>
         ))}
       </p>
@@ -54,6 +56,26 @@ const { Content } = await project.render();
 <style>
   .prose :global(h2) {
     margin-top: 2rem;
+  }
+  /* External link buttons (the "links" frontmatter list above the tags) get a visible fill,
+     a slight lift shadow, and a small "leaves the site" arrow icon so they read as clickable
+     buttons that go somewhere else, not plain text. */
+  .btn-external {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--color-card-bg);
+    box-shadow: 0 1px 3px rgba(31, 61, 99, 0.16);
+  }
+  .btn-external:hover {
+    box-shadow: 0 2px 5px rgba(31, 61, 99, 0.22);
+  }
+  .btn-external .external-icon {
+    font-size: 0.85em;
+    color: var(--color-text-muted);
+  }
+  .btn-external:hover .external-icon {
+    color: var(--color-accent);
   }
   .prose :global(img) {
     max-width: 100%;
@@ -142,6 +164,24 @@ const { Content } = await project.render();
     object-fit: contain;
     border-radius: 0;
     display: block;
+  }
+  /* Optional per-slide caption: put a <p class="project-carousel-caption"> right after the
+     <img> inside a .project-carousel-slide. Since only the active slide is opacity:1, the
+     caption automatically follows its own slide with no extra JS - it's just an overlay bar
+     anchored to the bottom of that slide's box. */
+  .prose :global(.project-carousel-caption) {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 0.6rem 0.9rem;
+    background: rgba(31, 61, 99, 0.82);
+    color: #fdfbf6;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    line-height: 1.4;
+    text-align: left;
   }
   .prose :global(.project-carousel-arrow) {
     position: absolute;

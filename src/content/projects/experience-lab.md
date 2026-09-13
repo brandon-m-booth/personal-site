@@ -59,23 +59,29 @@ in a sound-resistant room and blocked out light from the windows. We even decide
 walls black to minimize the light reflections from the computer monitor. Here are some before and
 after snapshots of the lab:
 
-<div class="project-gallery">
-  <figure>
-    <img src="/images/projects/experience-lab/lab-before-1.jpg" alt="Empty room before conversion to the Experience Lab" />
-    <figcaption>Checking the layout before transforming the room into a lab.</figcaption>
-  </figure>
-  <figure>
-    <img src="/images/projects/experience-lab/lab-before-2.jpg" alt="Another before photo of the empty room" />
-    <figcaption>Another "before" photo.</figcaption>
-  </figure>
-  <figure>
-    <img src="/images/projects/experience-lab/lab-before-3.jpg" alt="Room painted black to remove reflections and distractions" />
-    <figcaption>We wanted to remove as many potential distractions as possible, including sun light and reflective wall colors.</figcaption>
-  </figure>
-  <figure>
-    <img src="/images/projects/experience-lab/lab-after-eeg-test.jpg" alt="Lab mate testing the Emotiv EPOC+ EEG headset in the finished room" />
-    <figcaption>My lab mate testing out the Emotiv EPOC+ EEG headset in the finished room.</figcaption>
-  </figure>
+<div class="project-carousel">
+  <div class="project-carousel-viewport">
+    <div class="project-carousel-slide is-active">
+      <img src="/images/projects/experience-lab/lab-before-1.jpg" alt="Empty room before conversion to the Experience Lab" />
+      <p class="project-carousel-caption">Checking the layout before transforming the room into a lab.</p>
+    </div>
+    <div class="project-carousel-slide">
+      <img src="/images/projects/experience-lab/lab-before-2.jpg" alt="Another before photo of the empty room" />
+      <p class="project-carousel-caption">Another "before" photo.</p>
+    </div>
+    <div class="project-carousel-slide">
+      <img src="/images/projects/experience-lab/lab-before-3.jpg" alt="Room painted black to remove reflections and distractions" />
+      <p class="project-carousel-caption">We wanted to remove as many potential distractions as possible, including sun light and reflective wall colors.</p>
+    </div>
+    <div class="project-carousel-slide">
+      <img src="/images/projects/experience-lab/lab-after-eeg-test.jpg" alt="Lab mate testing the Emotiv EPOC+ EEG headset in the finished room" />
+      <p class="project-carousel-caption">My lab mate testing out the Emotiv EPOC+ EEG headset in the finished room.</p>
+    </div>
+    <button type="button" class="project-carousel-arrow project-carousel-prev" aria-label="Previous image">&lsaquo;</button>
+    <button type="button" class="project-carousel-arrow project-carousel-next" aria-label="Next image">&rsaquo;</button>
+  </div>
+  <div class="project-carousel-dots"></div>
+  <p class="project-carousel-counter"></p>
 </div>
 
 We did a lot of sensor research to figure out which devices to include in the lab that were
@@ -87,23 +93,29 @@ was skeptical at the time, so I built a prototype wristband GSR sensor. After I 
 signal strength was sufficient under the wrist, we invested in a research device (for the
 curious: Empatica E4).
 
-<div class="project-gallery">
-  <figure>
-    <img src="/images/projects/experience-lab/gsr-wristband-prototype.jpg" alt="Prototype wristband GSR sensor" />
-    <figcaption>Traditional high-fidelity GSR sensors measure at the finger tips, which would impede participants using keyboards/mice/controllers as input. I wanted to see how data collected at the finger tips compared to data collected from the wrist (where the skin is also thinner), so I built a test wristband GSR sensor.</figcaption>
-  </figure>
-  <figure>
-    <img src="/images/projects/experience-lab/gsr-results.jpg" alt="Preliminary GSR results collected from the wrist" />
-    <figcaption>Preliminary test GSR results collected from the wrist. They were qualitatively similar in structure to data collected at the finger tips, but showed less of the expected Bateman function shape. Still, skin conductance responses were measurable and didn't suffer from motion artifacts as much as the finger sensors. <em>Edit: this was an early test to see how the signal strength compared - wristband sensors like the Empatica E4 are available and (in our experience) do a pretty good job.</em></figcaption>
-  </figure>
-  <figure>
-    <img src="/images/projects/experience-lab-cover.png" alt="Block diagram of Experience Lab devices and information flow" />
-    <figcaption>A block diagram showing Experience Lab devices and information flow. Inputs are at the top and outputs at the bottom.</figcaption>
-  </figure>
-  <figure>
-    <img src="/images/projects/experience-lab/eeg-test.jpg" alt="Testing the EEG device" />
-    <figcaption>Me testing the EEG device too. It is surprisingly easy to put on.</figcaption>
-  </figure>
+<div class="project-carousel">
+  <div class="project-carousel-viewport">
+    <div class="project-carousel-slide is-active">
+      <img src="/images/projects/experience-lab/gsr-wristband-prototype.jpg" alt="Prototype wristband GSR sensor" />
+      <p class="project-carousel-caption">Traditional high-fidelity GSR sensors measure at the finger tips, which would impede participants using keyboards/mice/controllers as input. I wanted to see how data collected at the finger tips compared to data collected from the wrist (where the skin is also thinner), so I built a test wristband GSR sensor.</p>
+    </div>
+    <div class="project-carousel-slide">
+      <img src="/images/projects/experience-lab/gsr-results.jpg" alt="Preliminary GSR results collected from the wrist" />
+      <p class="project-carousel-caption">Preliminary test GSR results collected from the wrist. They were qualitatively similar in structure to data collected at the finger tips, but showed less of the expected Bateman function shape. Still, skin conductance responses were measurable and didn't suffer from motion artifacts as much as the finger sensors. <em>Edit: this was an early test to see how the signal strength compared - wristband sensors like the Empatica E4 are available and (in our experience) do a pretty good job.</em></p>
+    </div>
+    <div class="project-carousel-slide">
+      <img src="/images/projects/experience-lab-cover.png" alt="Block diagram of Experience Lab devices and information flow" />
+      <p class="project-carousel-caption">A block diagram showing Experience Lab devices and information flow. Inputs are at the top and outputs at the bottom.</p>
+    </div>
+    <div class="project-carousel-slide">
+      <img src="/images/projects/experience-lab/eeg-test.jpg" alt="Testing the EEG device" />
+      <p class="project-carousel-caption">Me testing the EEG device too. It is surprisingly easy to put on.</p>
+    </div>
+    <button type="button" class="project-carousel-arrow project-carousel-prev" aria-label="Previous image">&lsaquo;</button>
+    <button type="button" class="project-carousel-arrow project-carousel-next" aria-label="Next image">&rsaquo;</button>
+  </div>
+  <div class="project-carousel-dots"></div>
+  <p class="project-carousel-counter"></p>
 </div>
 
 After extensive research and testing of various sensors, we acquired consumer and research
@@ -136,9 +148,3 @@ used to measure physical and mental load and how to quantify skill. Neither of t
 easy either. Some day we'll have answers to enough of these kinds of questions and may be able to
 build closed-loop real-time feedback systems that enable the computer's software to evolve
 alongside its user to optimize their overall experience. That will be an exciting day!
-
-## Updates
-
-- **2026-09-13**: Pulled in the full project write-up, photo galleries, and video demo from the
-  original site.
-- **2026-09-12**: Migrated from the old site.

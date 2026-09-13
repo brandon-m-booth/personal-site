@@ -49,10 +49,3 @@ money](http://wvutoday.wvu.edu/n/2015/06/12/wvu-engineering-students-bring-home-
   <div class="project-carousel-dots"></div>
   <p class="project-carousel-counter"></p>
 </div>
-
-## Updates
-
-- **2026-09-13**: Re-confirmed all four photos are the highest-resolution originals the old
-  site has, and switched the gallery to a one-at-a-time carousel with prev/next arrows.
-- **2026-09-13**: Pulled in the full write-up and photo gallery from the original site.
-- **2026-09-12**: Migrated from the old site.

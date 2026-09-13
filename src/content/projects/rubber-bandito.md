@@ -16,7 +16,3 @@ featured: false
 ---
 
 Contributed to Rubber Bandito. See the Kickstarter page for details on the product.
-
-## Updates
-
-- **2026-09-12**: Migrated from the old site as a placeholder - please expand with your role and details.
