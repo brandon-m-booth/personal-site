@@ -8,7 +8,7 @@ export const SITE = {
   description:
     'Assistant Professor of Computer Science at the University of Memphis. Research on machine learning, signal processing, algorithmic bias/fairness, and human behavior modeling.',
   url: 'https://www.brandonmbooth.net',
-  email: 'brandon.booth@memphis.edu', // TODO: confirm your current institutional email
+  email: 'bmbooth@memphis.edu',
 };
 
 export type NavLink = { label: string; href: string };
@@ -22,12 +22,12 @@ export const NAV_LINKS: NavLink[] = [
 ];
 
 // External links shown in the footer (and some on the home page).
-// Update `lab` to your current lab site at Memphis - a public search didn't turn
-// up a dedicated CUBES Lab website, so this is still a placeholder. The logo
-// image is real (pulled from your CUBES Lab folder) and will show up once you
-// set a real URL here.
+// `lab` is intentionally empty - a public search didn't turn up a dedicated CUBES Lab
+// website yet. The CUBES Lab logo (real, pulled from your CUBES Lab folder) shows on the
+// home page next to the CV/Publications/Projects buttons either way; once you set a real
+// URL here, it automatically becomes a clickable link there (see src/pages/index.astro).
 export const EXTERNAL_LINKS = {
-  lab: 'https://example.edu/your-lab', // TODO: replace with your CUBES Lab URL
+  lab: '', // TODO: set once CUBES Lab site exists
   labLabel: 'CUBES Lab',
   labLogo: '/images/lab/cubes-lab-logo-horizontal.png',
   labLogoAlt: 'CUBES Lab logo',

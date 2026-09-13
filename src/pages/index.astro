@@ -28,12 +28,13 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft && d
 
         <p>
           Welcome! I am an assistant professor working with the Department of Computer Science at
-          the University of Memphis. My research interests span topics in machine learning, signal
-          processing, algorithmic bias/fairness, and data collection and annotation methods,
-          especially as they pertain to human behavior and experience modeling. I have a diverse
-          background in industry, working as a video game and serious game developer and as an
-          R&amp;D engineer on problems in robotics, computer vision, human-computer interaction
-          systems, and geospatial visualization.
+          the University of Memphis, where I lead the CUBES Lab (Computational Understanding of
+          Behaviors, Experiences, and States). My research interests span topics in machine
+          learning, signal processing, algorithmic bias/fairness, and data collection and
+          annotation methods, especially as they pertain to human behavior and experience
+          modeling. I have a diverse background in industry, working as a video game and serious
+          game developer and as an R&amp;D engineer on problems in robotics, computer vision,
+          human-computer interaction systems, and geospatial visualization.
         </p>
 
         <p>
@@ -42,14 +43,35 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft && d
           <a href={`mailto:${SITE.email}`}>get in touch</a>.
         </p>
 
-        <p style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-top:1.5rem;">
-          <a class="btn" href="/cv">View CV</a>
-          <a class="btn-outline" href="/publications">Publications</a>
-          <a class="btn-outline" href="/projects">Projects</a>
-          {EXTERNAL_LINKS.lab && (
-            <a class="btn-outline" href={EXTERNAL_LINKS.lab} target="_blank" rel="noopener noreferrer">
-              {EXTERNAL_LINKS.labLabel || 'Lab'} &rarr;
-            </a>
+        <p class="muted" style="font-size:0.9rem;">
+          P.S. If you're reaching out about joining the lab, please skip the credentials rundown
+          in your email (that's what your attached CV is for) and instead tell me, in your
+          own words (not AI), what topic related to our lab's research you're most excited about
+	  and why.
+        </p>
+
+        <p style="display:flex; gap:1.1rem; flex-wrap:wrap; align-items:center; margin-top:1.5rem;">
+          <span style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <a class="btn" href="/cv">View CV</a>
+            <a class="btn-outline" href="/publications">Publications</a>
+            <a class="btn-outline" href="/projects">Projects</a>
+          </span>
+          {EXTERNAL_LINKS.labLogo && (
+            EXTERNAL_LINKS.lab ? (
+              <a href={EXTERNAL_LINKS.lab} target="_blank" rel="noopener noreferrer" style="display:inline-flex;">
+                <img
+                  src={EXTERNAL_LINKS.labLogo}
+                  alt={EXTERNAL_LINKS.labLogoAlt || EXTERNAL_LINKS.labLabel || 'CUBES Lab logo'}
+                  style="height:40px; width:auto; display:block;"
+                />
+              </a>
+            ) : (
+              <img
+                src={EXTERNAL_LINKS.labLogo}
+                alt={EXTERNAL_LINKS.labLogoAlt || EXTERNAL_LINKS.labLabel || 'CUBES Lab logo'}
+                style="height:40px; width:auto; display:block;"
+              />
+            )
           )}
         </p>
       </div>
