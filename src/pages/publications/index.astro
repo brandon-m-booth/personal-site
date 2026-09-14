@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import publications from '../../data/publications.generated.json';
 import { EXTERNAL_LINKS } from '../../site.config';
+import PageQuote from '../../components/PageQuote.astro';
 
 // The "Unpublished" section at the bottom is rendered statically (title,
 // year, and a direct download link only) rather than through the
@@ -25,6 +26,8 @@ const categories = [...new Set(listedPubs.map((p) => p.category))].sort(
       <h1>Publications</h1>
       <span class="muted">{publications.length} entries</span>
     </div>
+
+    <PageQuote quote="Publication is a marathon, not a sprint..." author="Jo Linsdell" />
 
     <form class="pub-controls" id="pub-controls">
       <input type="search" id="pub-search" placeholder="Search title, venue, author..." aria-label="Search publications" />

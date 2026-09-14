@@ -1,13 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageQuote from '../components/PageQuote.astro';
 ---
 
-<BaseLayout title="Curriculum Vitae" description="Curriculum vitae">
+<BaseLayout title="CV" description="Curriculum vitae.">
   <div class="container">
     <div class="section-heading">
-      <h1>Curriculum Vitae</h1>
+      <h1>CV</h1>
       <a class="btn" href="/cv.pdf" download>Download PDF</a>
     </div>
+    <PageQuote quote="Our true self is being who we are." author="Lailah Gifty Akita" />
     <object data="/cv.pdf" type="application/pdf" class="cv-embed">
       <p>
         Your browser can't display the PDF inline. <a href="/cv.pdf">Download it here</a>{' '}

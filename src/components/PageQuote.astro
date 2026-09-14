@@ -1,0 +1,15 @@
+---
+// Small literary blockquote shown just under a page's title, carried over from the old
+// brandonmbooth.net site (Weebly), which had a different quote in the header banner of each
+// top-level page. Usage: <PageQuote quote="..." author="..." />
+interface Props {
+  quote: string;
+  author: string;
+}
+const { quote, author } = Astro.props;
+---
+
+<blockquote class="page-quote">
+  <p>&ldquo;{quote}&rdquo;</p>
+  <cite class="page-quote-attribution">{author}</cite>
+</blockquote>

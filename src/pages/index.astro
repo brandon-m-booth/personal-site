@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { SITE, EXTERNAL_LINKS } from '../site.config';
+import PageQuote from '../components/PageQuote.astro';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -26,6 +27,11 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft && d
           Assistant Professor, Department of Computer Science, University of Memphis
         </p>
 
+        <PageQuote
+          quote="Education is not the learning of facts, but the training of the mind to think."
+          author="Albert Einstein"
+        />
+
         <p>
           Welcome! I am an assistant professor working with the Department of Computer Science at
           the University of Memphis, where I lead the CUBES Lab (Computational Understanding of
@@ -45,9 +51,9 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft && d
 
         <p class="muted" style="font-size:0.9rem;">
           P.S. If you're reaching out about joining the lab, please skip the credentials rundown
-          in your email (that's what your attached CV is for) and instead tell me, in your
-          own words (not AI), what topic related to our lab's research you're most excited about
-	  and why.
+          in your email (that's what your attached CV is for) &mdash; and instead tell me, in your
+          own words (not AI), what topic related to our lab's research you connect with the most,
+          and why.
         </p>
 
         <p style="display:flex; gap:1.1rem; flex-wrap:wrap; align-items:center; margin-top:1.5rem;">

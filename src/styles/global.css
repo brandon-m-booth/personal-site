@@ -233,6 +233,36 @@ main {
   color: var(--color-text-muted);
 }
 
+/* Small literary blockquote under a page title - one per top-level page, carried over from
+   the old site's per-page header quotes. */
+.page-quote {
+  margin: 0.5rem 0 1.6rem;
+  padding-left: 1.1rem;
+  border-left: 3px solid var(--color-accent);
+}
+
+.page-quote p {
+  margin: 0;
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.page-quote-attribution {
+  display: block;
+  margin-top: 0.35rem;
+  font-style: normal;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.page-quote-attribution::before {
+  content: '\2014\00a0';
+}
+
 .grid-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
